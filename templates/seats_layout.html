@@ -1,0 +1,250 @@
+{% extends 'customerbase.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Light grey background for better contrast */
+        }
+        .stage {
+    width: 100%;
+    height: 200px; 
+    border-radius: 20px; 
+    background-image: url('https://elements-cover-images-0.imgix.net/f60a779e-4352-417f-ad25-eecf3306e7b0?auto=compress%2Cformat&w=900&fit=max&s=a07e52af6ca15299c4f2581a6189f501'); /* Stage image */
+    background-size: 100% 170%; /* Stretch image to fill the div */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    position: relative;
+    margin-bottom: 20px; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); 
+    overflow: hidden; 
+}
+
+        .stage h3 {
+            color: black;
+            margin-bottom: 10px; /* White text for contrast */
+            font-size: 2em; /* Size of the stage title */
+        }
+        .seat {
+            width: 80px; /* Width for each seat */
+            height: 80px; /* Height for each seat */
+            display: inline-block;
+            text-align: center;
+            line-height: 80px; /* Center text vertically */
+            margin: 30px 60px; /* Increased space between seats */
+            cursor: pointer;
+            background-image: url('https://cdn0.iconfinder.com/data/icons/cooking-18/64/dinner-food-restaurant-table-512.png');
+            background-size: cover; /* Cover the div */
+            background-repeat: no-repeat; /* No repeat */
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Neon glow effect */
+            transition: transform 0.2s, box-shadow 0.2s; /* Transition for hover effect */
+        }
+        .seat:hover {
+            transform: scale(1.1); /* Slightly enlarge on hover */
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.8); /* Stronger glow on hover */
+        }
+        .selected {
+            background-color: rgba(255, 204, 0, 0.3); /* Semi-transparent background for selected seats */
+        }
+        .booked {
+            background-color: red; /* Booked seats */
+        }
+        .locked {
+            background-color: orange; /* Locked for 1 minute */
+        }
+        #seat-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow seats to wrap */
+            justify-content: center; /* Center align seats */
+            width: 250px; /* Fixed width for container */
+            margin: 0 auto; /* Center the seat container */
+        }
+        /* Styling for rows */
+        .row {
+            display: flex; /* Use flexbox for rows */
+            justify-content: center; /* Center align each row */
+            margin-bottom: 10px; /* Space between rows */
+        }
+        .price {
+            margin-top: -15px;
+            font-size: 0.8em; /* Slightly smaller font size */
+            color: black; /* White color for contrast */
+            display: block; /* Block display for separation */
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Select Your Seats</h2>
+    
+    <!-- Enhanced Stage -->
+    <div class="stage">
+        <h3>Stage</h3>
+    </div>
+
+    <div id="seat-container">
+        <div class="row">
+            {% for seat in seats|slice:":3" %}
+                <div class="seat {% if seat.is_booked %}booked{% elif seat.is_locked %}locked{% endif %}" data-seat-id="{{ seat.id }}">
+                    {{ seat.seat_number }} <br>
+                    <span class="price">${{ seat.price }}</span> <!-- Price display -->
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for seat in seats|slice:"3:6" %}
+                <div class="seat {% if seat.is_booked %}booked{% elif seat.is_locked %}locked{% endif %}" data-seat-id="{{ seat.id }}">
+                    {{ seat.seat_number }} <br>
+                    <span class="price">${{ seat.price }}</span> <!-- Price display -->
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for seat in seats|slice:"6:9" %}
+                <div class="seat {% if seat.is_booked %}booked{% elif seat.is_locked %}locked{% endif %}" data-seat-id="{{ seat.id }}">
+                    {{ seat.seat_number }} <br>
+                    <span class="price">${{ seat.price }}</span> <!-- Price display -->
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <h3 style="text-align: center;">Selected Seats</h3>
+    <ul id="selected-seats-list" style="text-align: center;"></ul>
+    <button id="book-seats" disabled style="display: block; margin: 0 auto;">Book Selected Seats</button>
+    <a href="{% url 'my_booked_seats' %}" style="display: block; text-align: center; margin-top: 20px;">My Booked Seats</a>
+
+    {% if all_booked %}
+        <div style="text-align: center; margin-top: 20px;">
+            <p>No seats available. Would you like to join the queue?</p>
+            <form action="{% url 'join_queue' %}" method="post" id="joinQueueForm">
+                {% csrf_token %}
+                <button type="submit">Join Queue</button>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let selectedSeats = [];
+
+        $('.seat').click(function() {
+            const seatId = $(this).data('seat-id');
+
+            if ($(this).hasClass('booked') || $(this).hasClass('locked')) {
+                alert('This seat is already booked or temporarily locked!');
+                return;
+            }
+
+            if (selectedSeats.includes(seatId)) {
+                selectedSeats = selectedSeats.filter(id => id !== seatId);
+                $(this).removeClass('selected');
+            } else {
+                selectedSeats.push(seatId);
+                $(this).addClass('selected');
+            }
+
+            $('#selected-seats-list').empty();
+            selectedSeats.forEach(seatId => {
+                $('#selected-seats-list').append(`<li>${seatId}</li>`); // Corrected template literal syntax
+            });
+
+            $('#book-seats').prop('disabled', selectedSeats.length === 0);
+
+            console.log('Selected seats (client-side):', selectedSeats);  // Debug selected seats on the client side
+        });
+
+        // Function to get CSRF token from cookies
+        function getCSRFToken() {
+            let csrfToken = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith('csrftoken=')) {
+                        csrfToken = cookie.substring('csrftoken='.length, cookie.length);
+                        break;
+                    }
+                }
+            }
+            return csrfToken;
+        }
+
+        $('#book-seats').click(function() {
+            if (selectedSeats.length === 0) {
+                alert('Please select at least one seat.');
+                return;
+            }
+
+            console.log('Booking selected seats:', selectedSeats);  // Debugging seat selection before sending AJAX
+
+            const csrfToken = getCSRFToken();  // Get the CSRF token
+
+            $.ajax({
+                url: '{% url "book_seat" %}',  // URL for booking seats
+                type: 'POST',
+                contentType: 'application/json',  // Set content type to JSON
+                data: JSON.stringify({
+                    'seats': selectedSeats  // Serialize seats as JSON
+                }),
+                headers: {
+                    'X-CSRFToken': csrfToken  // Add CSRF token to the headers
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('Seats booked successfully!');
+                        console.log('Seats successfully booked:', selectedSeats);  // Debug after successful booking
+                        window.location.reload();  // Reload to show updated seat status
+                    } else {
+                        alert('Booking failed, please try again.');
+                    }
+                },
+                error: function() {
+                    alert('Booking failed, please try again.');
+                }
+            });
+        });
+
+        // Temporary locking of seats for 1 minute
+        $('.seat').click(function() {
+            const seatId = $(this).data('seat-id');
+
+            if (!$(this).hasClass('booked') && !$(this).hasClass('locked')) {
+                $(this).addClass('locked');
+
+                $.ajax({
+                    url: '{% url "select_seat" %}',  // URL for locking seat
+                    type: 'POST',
+                    data: {
+                        'seat_id': seatId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // Send CSRF token with the request
+                    }
+                });
+
+                setTimeout(() => {
+                    $(this).removeClass('locked'); // Remove lock after 1 minute
+                }, 60000); // 60000 ms = 1 minute
+            }
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

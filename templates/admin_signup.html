@@ -1,0 +1,23 @@
+<!-- templates/admin_signup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Signup</title>
+</head>
+<body>
+    <h2>Admin Signup</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Signup</button>
+    </form>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <p>Already have an account? <a href="{% url 'adminlogin' %}">Login here</a></p>
+</body>
+</html>

@@ -1,0 +1,148 @@
+{% extends 'customerbase.html' %}
+
+{% block title %}Students Detail{% endblock %}
+
+{% load static %} <!-- Load static files if you need them elsewhere -->
+
+{% block content %}
+<style>
+  /* Main Container for Cards */
+  .event-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 24px;
+    margin-top: 36px;
+  }
+
+  @media (max-width: 1200px) {
+    .event-container {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .event-container {
+      grid-template-columns: 1fr; /* 1 column for small screens */
+    }
+  }
+
+  /* Styling for Individual Event Cards */
+  .event-card {
+    background: #fff; /* White background */
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    padding: 24px;
+    transition: transform 0.3s, box-shadow 0.3s; /* Smoother transition */
+    position: relative; /* For pseudo-element positioning */
+    overflow: hidden; /* Prevents overflow */
+    border: 1px solid #f0f0f0; /* Light border for definition */
+  }
+
+  /* Remove hover effect */
+  .event-card:hover {
+    transform: none; /* No transform on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Keep original shadow */
+  }
+
+  /* Event Card Title */
+  .event-card h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+    position: relative; /* Positioning for the pseudo-element */
+    z-index: 1; /* Ensures title is above pseudo-element */
+  }
+
+  /* Event Card Text */
+  .event-card p {
+    color: #555;
+    margin: 6px 0;
+    z-index: 1; /* Ensures text is above pseudo-element */
+  }
+
+  .event-card span {
+    font-weight: 600;
+    color: #6F4E37; /* Coffee shade for labels */
+  }
+
+  /* Image Styling */
+  .event-image {
+    width: 100%; /* Full width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Rounded corners for images */
+    margin-bottom: 12px; /* Space below image */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Shadow for images */
+    /* Removed hover effect */
+  }
+
+  /* VR Button Styling */
+  .vr-button {
+    background-color: #6F4E37; /* Coffee shade for button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px; /* Space above button */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+    position: relative; /* Positioning context for z-index */
+    z-index: 2; /* Ensure button is above other elements */
+  }
+
+  .vr-button:hover {
+    background-color: #7a5b48; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+  }
+
+  /* Add a subtle gradient overlay */
+  .event-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.2); /* White overlay with some transparency */
+    border-radius: 12px;
+    transition: background 0.3s; /* Transition for hover effect */
+    z-index: 0; /* Behind card content */
+  }
+
+  /* Removed hover effect */
+  .event-card:hover::before {
+    background: rgba(255, 255, 255, 0.4); /* Darker overlay on hover */
+  }
+</style>
+
+<h1>Public Events</h1>
+
+{% if events %}
+  <div class="event-container">
+    {% for event in events %}
+      <div class="event-card">
+        <a href="/customer/seats" style="text-decoration: none;">
+          {% if event.photo_url %}
+            <img src="{{ event.photo_url }}" alt="Event Image" class="event-image"> <!-- Add image here -->
+          {% else %}
+            <img src="{% static 'path/to/default/image.jpg' %}" alt="Default Event Image" class="event-image"> <!-- Default image if no URL -->
+          {% endif %}
+          <h3>{{ event.title }}</h3>
+          <p><span>Description:</span> {{ event.description }}</p>
+          <p><span>Date:</span> {{ event.event_date }}</p>
+          <p><span>Time:</span> {{ event.event_time }}</p>
+          <p><span>Manager:</span> {{ event.manager.username }}</p>
+          <p><span>Ongoing:</span> {% if event.is_ongoing %}Yes{% else %}No{% endif %}</p>
+        </a>
+        <a href="/customer/vr_view/" class="vr-button">View in VR</a> <!-- VR Button outside the anchor tag -->
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No public events found.</p>
+{% endif %}
+
+{% endblock %}

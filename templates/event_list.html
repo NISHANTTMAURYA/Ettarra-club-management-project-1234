@@ -1,0 +1,160 @@
+{% extends 'managerbase.html' %}
+
+{% block content %}
+<!-- templates/dashboard.html -->
+<style>
+    /* Scoped styles for the dashboard */
+    .main{
+        margin: auto  ;
+    }
+    .dashboard-container {
+        font-family: Arial, sans-serif; /* Font family */
+        padding: 30px; /* Padding around the container */
+        background-color: #ffffff; /* White background */
+        border-radius: 15px; /* Rounded corners for the container */
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* Softer shadow for the container */
+        max-width: 1200px; /* Maximum width for the container */
+        margin: 30px auto; /* Centering the container */
+    }
+
+    .dashboard-header {
+        display: flex; /* Flex display for header */
+        justify-content: space-between; /* Space between items */
+        align-items: center; /* Center items vertically */
+        margin-bottom: 20px; /* Space below header */
+    }
+
+    .dashboard-header h1 {
+        font-size: 28px; /* Increased header font size */
+        color: #333; /* Darker text color */
+        margin: 0; /* Remove default margin */
+    }
+
+    .logout-link {
+        text-decoration: none; /* Remove underline from link */
+        color: #f44336; /* Logout link color */
+        font-weight: bold; /* Bold text */
+        transition: color 0.3s; /* Transition for hover effect */
+        padding: 10px; /* Padding for better click area */
+        border-radius: 5px; /* Rounded corners for logout link */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for link */
+    }
+
+    .logout-link:hover {
+        color: #d32f2f; /* Darker shade on hover */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Shadow on hover */
+    }
+
+    .section-header {
+        font-size: 24px; /* Section header size */
+        color: #333; /* Darker text color */
+        margin: 30px 0 10px; /* Spacing around section header */
+        border-bottom: 2px solid #f0f0f0; /* Bottom border for section header */
+        padding-bottom: 10px; /* Padding below header */
+    }
+
+    table {
+        width: 100%; /* Full width */
+        border-collapse: collapse; /* Collapse borders */
+        margin-bottom: 40px; /* Space below table */
+    }
+
+    th, td {
+        padding: 15px; /* Inner padding for cells */
+        border: 1px solid #ddd; /* Light border for cells */
+        text-align: left; /* Align text to the left */
+    }
+
+    th {
+        background-color: #f7f7f7; /* Light grey background for header */
+        color: #444; /* Darker text color for header */
+        font-weight: bold; /* Bold text */
+        text-transform: uppercase; /* Uppercase for headers */
+        letter-spacing: 1px; /* Letter spacing for headers */
+    }
+
+    tr:hover {
+        background-color: #f1f1f1; /* Highlight row on hover */
+    }
+
+    .no-events {
+        text-align: center; /* Center align text */
+        color: #777; /* Grey color for no events message */
+        font-size: 18px; /* Font size for no events message */
+        font-style: italic; /* Italicize the no events message */
+    }
+
+    .btn {
+        display: inline-block; /* Inline block for button */
+        padding: 12px 20px; /* Padding for button */
+        background-color: #007bff; /* Primary button color */
+        color: #ffffff; /* Button text color */
+        text-decoration: none; /* Remove underline from link */
+        border-radius: 5px; /* Rounded corners for button */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Transition effects */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for button */
+        font-weight: bold; /* Bold button text */
+    }
+
+    .btn:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Shadow on hover */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 20px; /* Reduce padding on small screens */
+        }
+
+        .dashboard-header h1 {
+            font-size: 24px; /* Decrease header size */
+        }
+
+        .section-header {
+            font-size: 20px; /* Decrease section header size */
+        }
+
+        th, td {
+            padding: 10px; /* Reduce padding for cells */
+        }
+
+        .btn {
+            padding: 10px 15px; /* Adjust button padding */
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+
+    <!-- Ongoing Events Section -->
+    <h2 class="section-header">Ongoing Events</h2>
+    {% if events|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Event Title</th>
+                    <th>Event Time</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    {% if event.is_ongoing %}
+                        <tr>
+                            <td>{{ event.title }}</td>
+                            <td>{{ event.event_time }}</td>
+                            <td>{% if event.is_public %}Public{% else %}Private{% endif %}</td>
+                            <td><a class="btn" href="{% url 'endevent' event.id %}">End Event</a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-events">No ongoing events at the moment.</p>
+    {% endif %}
+
+    
+{% endblock %}

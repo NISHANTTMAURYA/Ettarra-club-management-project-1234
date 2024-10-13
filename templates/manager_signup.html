@@ -1,0 +1,23 @@
+<!-- templates/manager_signup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Signup</title>
+</head>
+<body>
+    <h2>Manager Signup</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Signup</button>
+    </form>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <p>Already have an account? <a href="{% url 'managerlogin' %}">Login here</a></p>
+</body>
+</html>

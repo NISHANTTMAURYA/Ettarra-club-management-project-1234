@@ -1,0 +1,23 @@
+<!-- templates/customer_signup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Signup</title>
+</head>
+<body>
+    <h2>Customer Signup</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Signup</button>
+    </form>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <p>Already have an account? <a href="{% url 'customerlogin' %}">Login here</a></p>
+</body>
+</html>

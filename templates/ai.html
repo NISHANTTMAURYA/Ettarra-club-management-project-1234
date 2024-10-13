@@ -1,0 +1,129 @@
+{% extends 'managerbase.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Event Planner</title>
+    <style>
+        .event-planner-body {
+            font-family: 'Arial', sans-serif;
+            color: #4a4a4a;
+            margin: 0;
+            padding: 20px;
+        }
+        .chat-container {
+            background: rgba(255, 255, 255, 0.9);
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            margin: 20px auto;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            font-size: 24px; /* Adjusted font size */
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Space between buttons */
+            margin-top: 20px; /* Space above button container */
+        }
+        .button1 {
+            padding: 10px 20px; /* Adjusted padding */
+            border-radius: 10px;
+            background: linear-gradient(90deg, #007bff, #00c4ff);
+            color: #fff;
+            font-size: 16px; /* Adjusted font size */
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s; /* Added transition */
+            flex: 1; /* Allow buttons to grow equally */
+            margin: 0 10px; /* Add horizontal margin */
+        }
+        .button1:hover {
+            background: linear-gradient(90deg, #00c4ff, #007bff);
+            transform: scale(1.05); /* Slightly enlarge button on hover */
+        }
+        .response-container {
+            margin-top: 20px;
+        }
+        .message {
+            background: #e7f3ff;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+        .message.bot {
+            align-self: flex-start;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: #d4edda;
+        }
+        input[type="file"] {
+            margin: 10px 0; /* Adjusted margin for file input */
+            padding: 8px; /* Added padding */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Border styling */
+            font-size: 16px; /* Font size for file input */
+        }
+    </style>
+</head>
+<body class="event-planner-body">
+    <div class="chat-container">
+        <h1><b>Event Planner AI</b></h1>
+        <div class="response-container">
+            {% if response %}
+            <div class="message bot">
+                <p>{{ response|linebreaks }}</p>
+            </div>
+            {% else %}
+            <div class="message bot">
+                <p>Please upload Last week's Report</p>
+            </div>
+            {% endif %}
+        </div>
+        <form method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column;">
+            {% csrf_token %}
+            <input type="file" name="event_data_pdf" required>
+            <div class="button-container">
+                <button class="button1" type="submit">Generate Event Plan</button>
+                {% if pdf_file_path %}
+                <a href="{{ pdf_file_path }}" class="button1" download>Download PDF Report</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const responseElement = document.querySelector(".response-container");
+        if (responseElement) {
+            let responseText = responseElement.innerHTML; // Changed to innerHTML to include HTML elements
+
+            // Bold text between double asterisks
+            responseText = responseText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+            
+            // Create paragraphs for numbered lists (e.g., 1. Some text)
+            responseText = responseText.replace(/(\d+\.\s.*?)(?=\d+\.\s|$)/gs, "<p>$1</p>");
+            
+            // Create paragraphs for bullet points (e.g., * Some text)
+            responseText = responseText.replace(/(\*\s.*?)(?=\*|$)/gs, "<p>$1</p>");
+            
+            // Set the formatted text back to the response container
+            responseElement.innerHTML = responseText;
+        }
+    });
+</script>
+</html>
+
+{% endblock content %}

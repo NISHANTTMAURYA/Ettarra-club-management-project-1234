@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .feedback-form {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .star-rating {
+            display: flex;
+            cursor: pointer;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: lightgray;
+            cursor: pointer;
+        }
+
+        .gold {
+            color: gold;
+        }
+
+        textarea {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #close {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: red;
+            float: right;
+        }
+
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Feedback Form</h1>
+    <div class="feedback-form">
+        <div>
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <br>
+        <textarea id="review" placeholder="Write your review here..." rows="4" cols="50"></textarea>
+        <br><br>
+        <button id="submit">Submit</button>
+    </div>
+
+    <!-- Popup for Google Review -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span id="close">&times;</span>
+            <p>Thank you for your feedback! Would you like to leave a review on Google?</p>
+            <a id="google-review-link" href="#" target="_blank">Leave a Review</a>
+            <button id="no-review">No, Thanks</button>
+        </div>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const reviewTextarea = document.getElementById('review');
+        const popup = document.getElementById('popup');
+        const closePopup = document.getElementById('close');
+        const googleReviewLink = document.getElementById('google-review-link');
+        const noReviewButton = document.getElementById('no-review');
+        let selectedRating = 0;
+
+        // Event listeners for each star
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = star.getAttribute('data-value');
+                updateStarColors(selectedRating);
+
+                // Show popup if rating is 4 or 5
+                if (selectedRating >= 4) {
+                    popup.style.display = 'flex';
+                    googleReviewLink.href = 'https://search.google.com/local/writereview?placeid=ChIJ1Vz1gtbJ5zsRaGssiTKB9k4'; // Replace with your actual review link
+                }
+            });
+
+            // Highlight stars on hover
+            star.addEventListener('mouseover', () => {
+                updateStarColors(star.getAttribute('data-value'));
+            });
+
+            // Reset stars when mouse leaves
+            star.addEventListener('mouseout', () => {
+                updateStarColors(selectedRating);
+            });
+        });
+
+        // Update the colors of the stars based on the rating
+        function updateStarColors(rating) {
+            stars.forEach(star => {
+                star.style.color = star.getAttribute('data-value') <= rating ? 'gold' : 'lightgray';
+            });
+        }
+
+        // Close popup when the "X" is clicked
+        closePopup.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        // Handle the "No, Thanks" button click to close popup
+        noReviewButton.addEventListener('click', () => {
+            alert('Thank you for your feedback!');
+            popup.style.display = 'none'; // Close the popup
+        });
+
+        // Handle form submission (customize as needed)
+        document.getElementById('submit').addEventListener('click', () => {
+            const review = reviewTextarea.value;
+            if (selectedRating < 4) {
+                alert('Thank you for your feedback!');
+            } else {
+                alert('Thank you! Please consider leaving a review on Google.');
+            }
+            // Add any server submission logic here
+        });
+    </script>
+</body>
+</html>

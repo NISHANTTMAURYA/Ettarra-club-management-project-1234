@@ -1,0 +1,101 @@
+{% extends 'customerbase.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event - Virtual Tour</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css" />
+    <script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe-vr.js"></script>
+    <style>
+        .vr-view {
+            margin: 0; /* Remove any default margin */
+            font-family: Arial, sans-serif;
+            
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .vr-view h1, .vr-view h2 {
+            text-align: center;
+            color: #555;
+            margin: 10px 0; /* Optional: Add margin to headings */
+        }
+        .vr-view #panorama {
+            width: 100%;
+            height: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .vr-view .vr-container {
+            width: 100%;
+            height: 500px;
+            display: none; 
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .vr-view .vr-button {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+        .vr-view .vr-button:hover {
+            background-color: #f1f1f1;
+            transform: translateY(-2px);
+        }
+        .vr-view .vr-button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="vr-view">
+        <h1>{{ tour.name }}</h1>
+        <p>{{ tour.description }}</p>
+
+        <h2>360-Degree View</h2>
+        <div id="panorama"></div>
+
+    <script>
+        // Initialize Pannellum viewer
+        pannellum.viewer('panorama', {
+            "type": "equirectangular",
+            "panorama": "/media/image.jpg",
+            "autoLoad": true
+        });
+
+        // Function to toggle VR view
+        function toggleVR() {
+            const vrContainer = document.getElementById('vr-container');
+            const panoramaContainer = document.getElementById('panorama');
+
+            if (vrContainer.style.display === 'none' || vrContainer.style.display === "") {
+                vrContainer.style.display = 'block'; 
+                panoramaContainer.style.display = 'none'; 
+            } else {
+                vrContainer.style.display = 'none'; 
+                panoramaContainer.style.display = 'block'; 
+            }
+        }
+
+        // Show 360-degree view initially
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('vr-container').style.display = 'none'; 
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

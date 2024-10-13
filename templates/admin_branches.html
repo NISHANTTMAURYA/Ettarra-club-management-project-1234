@@ -1,0 +1,158 @@
+{% extends 'adminbase.html' %}
+
+{% block title %}Cafe Branches{% endblock %}
+
+{% block content %}
+    <style>
+        /* Scoped CSS styles for the cafe branches page */
+        .cafe-branches-body {
+            font-family: 'Arial', sans-serif;
+           Light background color */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .cafe-branches-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cafe-branches-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .cafe-branches-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 outlets per row */
+            gap: 20px; /* Increased space between the cards */
+        }
+
+        .cafe-branches-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s; /* Slight transition effect */
+            text-align: center; /* Center text for a better layout */
+        }
+
+        .cafe-branches-card img {
+            max-width: 100%;
+            height: 200px;
+            border-radius: 8px 8px 0 0;
+            object-fit: cover;
+        }
+
+        .cafe-branches-card h2 {
+            font-size: 1.8em;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+
+        .cafe-branches-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .cafe-branches-card a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .cafe-branches-card:hover {
+            transform: scale(1.05); /* Slightly enlarge on hover */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .cafe-branches-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 outlets per row on smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cafe-branches-grid {
+                grid-template-columns: 1fr; /* 1 outlet per row on very small screens */
+            }
+        }
+    </style>
+    <div class="cafe-branches-body">
+        <div class="cafe-branches-container">
+            <h1 class="cafe-branches-title">Our Outlets</h1>
+            <div class="cafe-branches-grid">
+                <div class="cafe-branches-card">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/511d4552864027.591f18d2bb07e.jpg" alt="Coffee Shop 1">
+                    <h2>Coffee Shop 1</h2>
+                    <p><strong>Address:</strong> 123 Coffee St, City</p>
+                    <p><strong>Phone:</strong> 123-456-7890</p>
+                    <p><strong>Rating:</strong> ★★★★☆ (4.5)</p>
+                    <p><strong>Description:</strong> A cozy coffee shop with great espresso.</p>
+                    <p><strong>Type:</strong> Coffee Shop</p>
+                    <p><strong>Email:</strong> <a href="mailto:info@coffeeshop1.com">info@coffeeshop1.com</a></p>
+                </div>
+                <div class="cafe-branches-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTfZr9bokC5huemUNxOGY9MnIrSncBRpFUhg&s" alt="Bakery Delight">
+                    <h2>Bakery Delight</h2>
+                    <p><strong>Address:</strong> 456 Bakery Ave, City</p>
+                    <p><strong>Phone:</strong> 098-765-4321</p>
+                    <p><strong>Rating:</strong> ★★★★★ (4.7)</p>
+                    <p><strong>Description:</strong> Delicious pastries and breads.</p>
+                    <p><strong>Type:</strong> Bakery</p>
+                    <p><strong>Email:</strong> <a href="mailto:contact@bakerydelight.com">contact@bakerydelight.com</a></p>
+                </div>
+                <div class="cafe-branches-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVDRZ9-1OG3dJRSvpifOGreHeJguuRAUMB5A&s" alt="Pizza Place">
+                    <h2>Pizza Place</h2>
+                    <p><strong>Address:</strong> 789 Pizza Blvd, City</p>
+                    <p><strong>Phone:</strong> 234-567-8901</p>
+                    <p><strong>Rating:</strong> ★★★★☆ (4.0)</p>
+                    <p><strong>Description:</strong> Best pizza in town!</p>
+                    <p><strong>Type:</strong> Restaurant</p>
+                    <p><strong>Email:</strong> <a href="mailto:order@pizzaplace.com">order@pizzaplace.com</a></p>
+                </div>
+                <div class="cafe-branches-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRokfx0qVb6yzzIvcwqxEXEzIbnHCegQ0w-ew&s" alt="Tea House">
+                    <h2>Tea House</h2>
+                    <p><strong>Address:</strong> 321 Tea Rd, City</p>
+                    <p><strong>Phone:</strong> 345-678-9012</p>
+                    <p><strong>Rating:</strong> ★★★★☆ (4.2)</p>
+                    <p><strong>Description:</strong> Relaxing tea house with a variety of teas.</p>
+                    <p><strong>Type:</strong> Tea House</p>
+                    <p><strong>Email:</strong> <a href="mailto:info@teahouse.com">info@teahouse.com</a></p>
+                </div>
+                <div class="cafe-branches-card">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/511d4552864027.591f18d2bb07e.jpg" alt="Sushi Spot">
+                    <h2>Sushi Spot</h2>
+                    <p><strong>Address:</strong> 654 Sushi St, City</p>
+                    <p><strong>Phone:</strong> 456-789-0123</p>
+                    <p><strong>Rating:</strong> ★★★★★ (4.8)</p>
+                    <p><strong>Description:</strong> Authentic sushi experience.</p>
+                    <p><strong>Type:</strong> Restaurant</p>
+                    <p><strong>Email:</strong> <a href="mailto:info@sushispot.com">info@sushispot.com</a></p>
+                </div>
+                <div class="cafe-branches-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSVjtk0Ytj-P5TSJZXg8cDZzym3ZpLMtoA4Q&sg" alt="Sandwich Shop">
+                    <h2>Sandwich Shop</h2>
+                    <p><strong>Address:</strong> 987 Sandwich Ave, City</p>
+                    <p><strong>Phone:</strong> 567-890-1234</p>
+                    <p><strong>Rating:</strong> ★★★★☆ (4.1)</p>
+                    <p><strong>Description:</strong> Tasty sandwiches made fresh.</p>
+                    <p><strong>Type:</strong> Deli</p>
+                    <p><strong>Email:</strong> <a href="mailto:contact@sandwichshop.com">contact@sandwichshop.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // JavaScript code can go here if needed
+    </script>
+{% endblock %}

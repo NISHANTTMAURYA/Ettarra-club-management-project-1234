@@ -1,0 +1,78 @@
+{% extends 'adminbase.html' %}
+
+{% block title %}Cafe Managers{% endblock %}
+
+{% block content %}
+    <div class="head-title">
+        <div class="left">
+            <h1>Cafe Managers</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li>
+                    <a class="active" href="#">Managers</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="managers-container">
+        <h2>Our Managers</h2>
+        <ul class="managers-list">
+            <li class="manager-item">
+                <h3>manager</h3>
+                <p><strong>Email:</strong> manager@example.com</p>
+                <p><strong>Phone:</strong> (123) 456-7890</p>
+                <p><strong>Branch:</strong> Main Cafe</p>
+            </li>
+            <li class="manager-item">
+                <h3>John Doe</h3>
+                <p><strong>Email:</strong> johndoe@example.com</p>
+                <p><strong>Phone:</strong> (123) 456-7890</p>
+                <p><strong>Branch:</strong> Main Cafe</p>
+            </li>
+            <li class="manager-item">
+                <h3>Jane Smith</h3>
+                <p><strong>Email:</strong> janesmith@example.com</p>
+                <p><strong>Phone:</strong> (987) 654-3210</p>
+                <p><strong>Branch:</strong> Downtown Cafe</p>
+            </li>
+            <li class="manager-item">
+                <h3>Emily Johnson</h3>
+                <p><strong>Email:</strong> emilyj@example.com</p>
+                <p><strong>Phone:</strong> (555) 123-4567</p>
+                <p><strong>Branch:</strong> Uptown Cafe</p>
+            </li>
+        </ul>
+    </div>
+
+    <style>
+        .managers-container {
+            margin: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .managers-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .manager-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .manager-item h3 {
+            margin: 0;
+            color: #009688;
+        }
+    </style>
+{% endblock %}

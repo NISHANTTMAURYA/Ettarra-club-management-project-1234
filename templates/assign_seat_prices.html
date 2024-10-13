@@ -1,0 +1,82 @@
+<!-- templates/assign_seat_prices.html -->
+{% extends 'managerbase.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Assign Prices for Seats - {{ event.title }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Seat Number</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seat in seats %}
+                <tr>
+                    <td>{{ seat.seat_number }}</td>
+                    <td>
+                        {% if seat.is_booked %}
+                            <span class="text-danger">Booked</span>
+                        {% elif seat.is_locked %}
+                            <span class="text-warning">Locked</span>
+                        {% else %}
+                            <span class="text-success">Available</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <input type="number" name="price_{{ seat.id }}" value="{{ seat.price|default:0 }}" step="0.01" min="0" class="form-control" required>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Update Prices</button>
+    </form>
+</div>
+
+<!-- Add some basic styles for better presentation -->
+<style>
+    .container {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+<!-- templates/list_events.html -->
+{% extends 'managerbase.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>All Events</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Event Title</th>
+                <th>Description</th>
+                <th>Event Date</th>
+                <th>Manage Prices</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.title }}</td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.event_date }}</td>
+                <td>
+                    <a href="{% url 'assign_seat_prices' event.id %}" class="btn btn-primary">Change Prices</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Basic styles for table and buttons -->
+<style>
+    .container {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        font-size: 14px;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+</style>
+
+{% endblock %}

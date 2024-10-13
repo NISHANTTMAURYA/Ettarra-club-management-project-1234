@@ -1,0 +1,165 @@
+{% extends 'managerbase.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <style>
+        /* Scoped styles for the create event page */
+        .create-event-container {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7; /* Light grey background */
+            color: #333; /* Dark text color */
+            padding: 20px; /* Padding for the container */
+            border-radius: 15px; /* Rounded corners for container */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* Shadow for container */
+            max-width: 500px; /* Max width for the form */
+            margin: auto; /* Center the form */
+        }
+
+        .create-event-container h2 {
+            text-align: center; /* Center heading */
+            color: #444; /* Darker text color */
+            margin-bottom: 20px; /* Spacing below heading */
+            font-size: 24px; /* Heading size */
+        }
+
+        /* Form styling */
+        .create-event-container form {
+            background-color: #ffffff; /* White background for form */
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            padding: 20px; /* Inner spacing for the form */
+        }
+
+        /* Table styling */
+        .create-event-container table {
+            width: 100%; /* Full width */
+            margin-bottom: 10px; /* Reduced spacing below the table */
+        }
+
+        .create-event-container td {
+            padding: 10px; /* Inner spacing for table cells */
+        }
+
+        .create-event-container label {
+            font-weight: bold; /* Bold labels */
+            display: block; /* Block display for labels */
+            margin-bottom: 5px; /* Spacing below labels */
+            color: #555; /* Medium grey color for labels */
+        }
+
+        /* Input styling */
+        .create-event-container input[type="text"],
+        .create-event-container textarea,
+        .create-event-container select {
+            width: calc(100% - 20px); /* Full width minus padding */
+            padding: 10px; /* Inner spacing for inputs */
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 10px; /* Rounded corners */
+            font-size: 14px; /* Adjusted input text size */
+            transition: border-color 0.3s; /* Transition for border color */
+        }
+
+        .create-event-container input[type="text"]:focus,
+        .create-event-container textarea:focus,
+        .create-event-container select:focus {
+            outline: none; /* Remove outline */
+            border-color: #007bff; /* Blue border color on focus */
+        }
+
+        /* Button styling */
+        .create-event-container button {
+            background-color: #007bff; /* Blue button color */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 10px; /* Rounded button corners */
+            padding: 10px; /* Inner spacing for button */
+            cursor: pointer; /* Pointer cursor */
+            width: 100%; /* Full width button */
+            font-size: 14px; /* Button text size */
+            transition: background-color 0.3s; /* Transition effects */
+        }
+
+        .create-event-container button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Message styling */
+        .create-event-container ul {
+            list-style: none; /* Remove default list styling */
+            padding: 0; /* Remove padding */
+            margin: 10px 0; /* Spacing above and below messages */
+        }
+
+        .create-event-container li {
+            background-color: #e7f3fe; /* Light blue background for messages */
+            color: #31708f; /* Dark blue text */
+            border: 1px solid #bcdff1; /* Border for messages */
+            padding: 10px; /* Inner spacing for message */
+            border-radius: 10px; /* Rounded corners for messages */
+            margin-bottom: 10px; /* Spacing below each message */
+        }
+    </style>
+</head>
+<body>
+    <div class="create-event-container">
+        <h2>Create a New Event</h2>
+
+        <!-- Display any messages (e.g., success or error messages) -->
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li{{ message.tags }}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Event creation form -->
+        <form method="POST">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td><label for="id_title">Title:</label></td>
+                    <td><input type="text" name="title" required></td>
+                </tr>
+                <tr>
+                    <td><label for="id_description">Description:</label></td>
+                    <td><textarea name="description" required></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="id_event_date">Event Date:</label></td>
+                    <td><input type="date" name="event_date" required></td>
+                </tr>
+                <tr>
+                    <td><label for="id_event_time">Event Time:</label></td>
+                    <td><input type="time" name="event_time" required></td>
+                </tr>
+                <tr>
+                    <td><label for="id_number_of_seats">Number of Seats:</label></td>
+                    <td><input type="number" name="number_of_seats" min="1" required></td>
+                </tr>
+                <tr>
+                    <td><label for="id_is_public">Public Event:</label></td>
+                    <td>
+                        <select name="is_public" required>
+                            <option value="True">Yes</option>
+                            <option value="False">No</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Submit button -->
+            <button type="submit">Create Event</button>
+        </form>
+
+        <!-- Link to return to the manager dashboard -->
+        <a href="{% url 'managerdashboard' %}">Back to Dashboard</a>
+    </div>
+</body>
+</html>
+{% endblock %}
